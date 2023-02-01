@@ -5,13 +5,6 @@ import { Main } from './components/main/Main';
 
 function App() {
 
-  // mongodb:
-  // user: root 
-  // password: ntriJvytmSa8mPf0
-
-  // 186.188.29.93/32
-  // My IP Address
-
 return (
     <div className="App">
       <Header />
