@@ -3,7 +3,7 @@
 ### Installation
 
 #### Clone Server
-- `Visit backend repository for more instructions:` [Dice Roller Server](https://github.com/gisbelt/diceRoller-chat-serve-chat/)
+- `Visit backend repository for more instructions:` [Dice Roller Server](https://github.com/gisbelt/diceRoller-chat-server)
 ```sh
 git clone https://github.com/gisbelt/diceRoller-chat-server.git
 cd diceRoller-chat-server
