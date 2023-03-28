@@ -1,8 +1,25 @@
 ![DiceGame](https://gisbeltorres.tech/assets/gifs/diceRoller.gif)
 
-# Getting Started with Create React App
+### Installation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#### Clone Server
+- `Visit backend repository for more instructions:` [Dice Roller Server](https://github.com/gisbelt/diceRoller-chat-serve-chat/)
+```sh
+git clone https://github.com/gisbelt/diceRoller-chat-server.git
+cd diceRoller-chat-server
+yarn install
+yarn dev # run in development mode with nodemon
+yarn start # run in production mode
+```
+#### Clone Client 
+```sh
+git clone https://github.com/gisbelt/diceRoller-chat.git
+cd diceRoller-chat
+cd src/hooks/useChat.js  # change const socket = io('htttp://localhost:4000')
+yarn install
+yarn start
+
+```
 
 ## Available Scripts
 
