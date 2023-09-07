@@ -53,26 +53,28 @@ export const useChat = () => {
 
         // send message to server 
         socket.emit('message', message, name)
+        
+        // save new message 
         const newMessage = {
             body: message,
             from: 'You'
-        }
-
-        // save message in an array to be stored in the database 
+        }       
         setMessages( messages.concat(newMessage) )
+
+        // http post request to save message in the database 
+        axios.post(url + 'save', {
+            message: message,
+            from: name
+        })
+        
+        // clean input
         setFormState(prev => ({...prev, message:''}))
         messageRef.current.select()
 
         // make the scroll automatically go to the last message 
         setTimeout(() => {
             messageContainerRef.current.lastChild.scrollIntoView();
-        }, 50);
-        
-        // http post request to save message 
-        axios.post(url + 'save', {
-            message: message,
-            from: name
-        })
+        }, 50);        
     }
 
     const onNickNameSubmit = (e) => {
