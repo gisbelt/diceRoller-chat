@@ -6,7 +6,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 
 // connection to listen and send events
-const socket = io('https://diceroller-chat-server.up.railway.app/')
+const socket = io('https://dice-roller-chat-server.onrender.com/')
 
 export const useChat = () => {
 
@@ -15,7 +15,7 @@ export const useChat = () => {
     const [storedMessages, setStoredMessages] = useState([]) // get stored messages from the database 
     const [firstTime, setFirstTime] = useState(false)
 
-    const url = 'https://diceroller-chat-server.up.railway.app/api/'
+    const url = 'https://dice-roller-chat-server.onrender.com/api/'
 
     useEffect(() => {
         const receivedMessage = (message) => {
