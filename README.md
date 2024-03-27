@@ -19,6 +19,17 @@ cd src/hooks/useChat.js  # change const socket = io('htttp://localhost:4000')
 yarn install
 yarn start
 ```
+#### Styles
+- Install a Sass transpiler 
+```sh
+npm install -g sass
+```
+- Run
+```sh
+sass .\src\App.scss .\src\styles.css --watch
+```
+- Now you can update the ***App.scss*** file
+
 ### Contributing
 - Fork the repository
 - Make your changes in a separate branch
