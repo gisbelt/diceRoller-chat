@@ -1,28 +1,30 @@
 import { MainContext } from './context/MainContext'
-import { useContext } from 'react'
+import { Suspense, useContext } from 'react'
 import { useChat } from '../../hooks/useChat'
 
 export const FormChat = () => {
 
     const { onInputChange, name, message, nickNameRef, messageRef, messageContainerRef, disabled } = useContext(MainContext)
-    const { onNickNameSubmit, onMessageSubmit, storedMessages, messages } = useChat()
+    const { onNickNameSubmit, onMessageSubmit, storedMessages, messages, firstTime } = useChat()
     
     return (
         <>
             <div className="chat_content">
                 <div ref={ messageContainerRef } id="message-container">
-                    {/* Chat stored messages  */}                    
-                    {storedMessages.map((message, index) => (
-                        <div key={ index } className={ `message_body ${message.from === name ? 'right' : 'left'}` } >
-                            <div className={ `message ${message.from === name ? 'bg-success' : 'bg-grey'}` }>
-                                <div className="message_text">
-                                    <strong>{message.from}:</strong> {message.message}
+                    <Suspense fallback={ <div className="loader" /> }>
+                        {/* Chat stored messages  */}
+                        {storedMessages.map((message, index) => (
+                            <div key={ index } className={ `message_body ${message.from === name ? 'right' : 'left'}` } >
+                                <div className={ `message ${message.from === name ? 'bg-success' : 'bg-grey'}` }>
+                                    <div className="message_text">
+                                        <strong>{message.from}:</strong> {message.message}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </Suspense> 
 
-                    {/* Chat messages  */}   
+                    {/* Chat messages  */}
                     {messages.map((message, index) => (
                         <div key={ index } className={ `message_body ${message.from === 'You' ? 'right' : 'left'}` } >
                             <div className={ `message ${message.from === 'You' ? 'bg-success' : 'bg-grey'}` }>
@@ -31,7 +33,7 @@ export const FormChat = () => {
                                 </div>
                             </div>
                         </div>
-                    ))}             
+                    ))}
                 </div>
             </div>
 
