@@ -3,19 +3,21 @@ import { MainContext } from '../components/main/context/MainContext'
 import { useContext } from 'react'
 import io from 'socket.io-client'
 import axios from 'axios'
+import useSWR from "swr"
 import Swal from 'sweetalert2'
 
 // connection to listen and send events
 const socket = io('https://dice-roller-chat-server.onrender.com/')
+const fetcher = url => axios.get(url).then(res => res.data)
 
 export const useChat = () => {
-
+    const url = 'https://dice-roller-chat-server.onrender.com/api/'
+    const { data: storedData, isLoading } = useSWR(url + 'messages', fetcher)
+    
     const { name, message, setFormState, nickNameRef, messageRef, messageContainerRef, setDisabled } = useContext(MainContext)
     const [messages, setMessages] = useState([]) // new messages
     const [storedMessages, setStoredMessages] = useState([]) // get stored messages from the database 
     const [firstTime, setFirstTime] = useState(false)
-
-    const url = 'https://dice-roller-chat-server.onrender.com/api/'
 
     useEffect(() => {
         const receivedMessage = (message) => {
@@ -29,17 +31,14 @@ export const useChat = () => {
           socket.off('message', receivedMessage)
         }
     }, [messages, messageContainerRef])
-  
 
     // condition to load messages from the database only the first time  
-    if (!firstTime) {
-        axios.get(url + 'messages').then(res => {
-            setStoredMessages(res.data.messages.reverse())
-        })
+    if (storedData && !firstTime) {
+        setStoredMessages(storedData.messages)
         setFirstTime(true)
     }
 
-    const onMessageSubmit = (e) => {
+    const onMessageSubmit = async (e) => {
         e.preventDefault()
         if( name.trim().length <= 1 ) {
             nickNameRef.current.select();
@@ -50,22 +49,17 @@ export const useChat = () => {
                 confirmButtonText: 'Cool'
             })
         } 
-
+       
         // send message to server 
         socket.emit('message', message, name)
-        
+    
         // save new message 
-        const newMessage = {
-            body: message,
-            from: 'You'
-        }       
+        const newMessage = { body: message, from: 'You' }
+        // save message in an array to be stored in the database 
         setMessages( messages.concat(newMessage) )
 
         // http post request to save message in the database 
-        axios.post(url + 'save', {
-            message: message,
-            from: name
-        })
+        axios.post(url + 'save', { message: message, from: name })
         
         // clean input
         setFormState(prev => ({...prev, message:''}))
@@ -87,8 +81,9 @@ export const useChat = () => {
     return {
         onMessageSubmit, 
         onNickNameSubmit,
-        storedMessages,    
+        storedMessages,
         messages, 
+        isLoading
     }
     
 }
